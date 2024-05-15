@@ -1,8 +1,7 @@
 package com.example.caloriecounter
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction
+import java.io.File
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -19,12 +19,17 @@ class LogFoodFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var view: View
     private var breakfastListAmount = 0
     private var lunchListAmount = 0
     private var dinnerListAmount = 0
     private var snackListAmount = 0
+
+    private var breakfastItemList = mutableListOf<String>()
+    private var lunchItemList = mutableListOf<String>()
+    private var dinnerItemList = mutableListOf<String>()
+    private var snackItemList = mutableListOf<String>()
+
+    private lateinit var view: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,58 +44,10 @@ class LogFoodFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (this::view.isInitialized) {
-            return view
-        }
         val view = inflater.inflate(R.layout.fragment_logfood, container, false)
         this.view = view
 
-        sharedPreferences = requireContext().getSharedPreferences(
-            "caloric_data", Context.MODE_PRIVATE)
-
-        val breakfastCalorieAmount = sharedPreferences.getInt(
-            "breakfastCalorieAmount", breakfastListAmount)
-
-        val lunchCalorieAmount = sharedPreferences.getInt(
-            "lunchCalorieAmount", lunchListAmount)
-
-        val dinnerCalorieAmount = sharedPreferences.getInt(
-            "dinnerCalorieAmount", dinnerListAmount)
-
-        val snackCalorieAmount = sharedPreferences.getInt(
-            "snackCalorieAmount", snackListAmount)
-
-        val breakfastAmountTextView = view.findViewById<TextView>(R.id.breakfastCalListAmount)
-        breakfastAmountTextView.text = breakfastCalorieAmount.toString()
-
-        val lunchAmountTextView = view.findViewById<TextView>(R.id.lunchCalListAmount)
-        lunchAmountTextView.text = lunchCalorieAmount.toString()
-
-        val dinnerAmountTextView = view.findViewById<TextView>(R.id.dinnerCalListAmount)
-        dinnerAmountTextView.text = dinnerCalorieAmount.toString()
-
-        val snackAmountTextView = view.findViewById<TextView>(R.id.snackCalListAmount)
-        snackAmountTextView.text = snackCalorieAmount.toString()
-
-        val breakfastListView = view.findViewById<ListView>(R.id.breakfastListView)
-        val lunchListView = view.findViewById<ListView>(R.id.lunchListView)
-        val dinnerListView = view.findViewById<ListView>(R.id.dinnerListView)
-        val snackListView = view.findViewById<ListView>(R.id.snackListView)
-
-        val breakfastItems = sharedPreferences.getStringSet("breakfast_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val lunchItems = sharedPreferences.getStringSet("lunch_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val dinnerItems = sharedPreferences.getStringSet("dinner_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val snackItems = sharedPreferences.getStringSet("snack_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-
-        val breakfastAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, breakfastItems)
-        val lunchAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, lunchItems)
-        val dinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, dinnerItems)
-        val snackAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, snackItems)
-
-        breakfastListView.adapter = breakfastAdapter
-        lunchListView.adapter = lunchAdapter
-        dinnerListView.adapter = dinnerAdapter
-        snackListView.adapter = snackAdapter
+        loadData()
 
         return view
     }
@@ -98,10 +55,26 @@ class LogFoodFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val breakfastItems = sharedPreferences.getStringSet("breakfast_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val lunchItems = sharedPreferences.getStringSet("lunch_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val dinnerItems = sharedPreferences.getStringSet("dinner_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val snackItems = sharedPreferences.getStringSet("snack_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
+        val breakfastItems = mutableListOf<String>()
+        val lunchItems = mutableListOf<String>()
+        val dinnerItems = mutableListOf<String>()
+        val snackItems = mutableListOf<String>()
+
+        val breakfastAmountTextView =
+            view.findViewById<TextView>(R.id.breakfastCalListAmount)
+        breakfastAmountTextView?.text = breakfastListAmount.toString()
+
+        val lunchAmountTextView =
+            view.findViewById<TextView>(R.id.lunchCalListAmount)
+        lunchAmountTextView?.text = lunchListAmount.toString()
+
+        val dinnerAmountTextView =
+            view.findViewById<TextView>(R.id.dinnerCalListAmount)
+        dinnerAmountTextView?.text = dinnerListAmount.toString()
+
+        val snackAmountTextView =
+            view.findViewById<TextView>(R.id.snackCalListAmount)
+        snackAmountTextView?.text = snackListAmount.toString()
 
         parentFragmentManager.setFragmentResultListener(
             "itemInputResult",
@@ -157,6 +130,59 @@ class LogFoodFragment : Fragment() {
         transaction.commit()
     }
 
+    private fun saveData() {
+        val fileName = "calorie_data.txt"
+        val file = File(requireContext().filesDir, fileName)
+
+        val dataString = "$breakfastListAmount, $lunchListAmount, $dinnerListAmount," +
+                " $snackListAmount," +
+                " $breakfastItemList," +
+                " $lunchItemList," +
+                " $dinnerItemList," +
+                " $snackItemList,"
+        file.writeText(dataString)
+    }
+
+    private fun loadData() {
+        val fileName = "calorie_data.txt"
+        val file = File(requireContext().filesDir, fileName)
+
+        try {
+            val dataString = file.readText()
+
+            if (dataString.isNotEmpty()) {
+                val dataValues = dataString.split(",")
+                breakfastListAmount = dataValues[0].toInt()
+                lunchListAmount = dataValues[1].toInt()
+                dinnerListAmount = dataValues[2].toInt()
+                snackListAmount = dataValues[3].toInt()
+                breakfastItemList = dataValues[4].split(",").toMutableList()
+                lunchItemList = dataValues[5].split(",").toMutableList()
+                dinnerItemList = dataValues[6].split(",").toMutableList()
+                snackItemList = dataValues[7].split(",").toMutableList()
+
+            } else {
+                breakfastListAmount = 0
+                lunchListAmount = 0
+                dinnerListAmount = 0
+                snackListAmount = 0
+                breakfastItemList = mutableListOf()
+                lunchItemList = mutableListOf()
+                dinnerItemList = mutableListOf()
+                snackItemList = mutableListOf()
+            }
+
+        } catch (e: Exception) {
+            val fileContents = file.readText()
+            Log.d("LoadData", "File contents: $fileContents")
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        saveData()
+    }
+
     private fun updateListView(
         itemList: MutableList<String>,
         itemName: String?,
@@ -175,6 +201,7 @@ class LogFoodFragment : Fragment() {
                 val breakfastAmountTextView =
                     view.findViewById<TextView>(R.id.breakfastCalListAmount)
                 breakfastAmountTextView?.text = breakfastListAmount.toString()
+                breakfastItemList = itemList
             }
 
             R.id.lunchListView -> {
@@ -182,68 +209,35 @@ class LogFoodFragment : Fragment() {
                 val lunchAmountTextView =
                     view.findViewById<TextView>(R.id.lunchCalListAmount)
                 lunchAmountTextView?.text = lunchListAmount.toString()
+                lunchItemList = itemList
             }
 
             R.id.dinnerListView -> {
                 dinnerListAmount += calorieInt
-                val lunchAmountTextView =
+                val dinnerAmountTextView =
                     view.findViewById<TextView>(R.id.dinnerCalListAmount)
-                lunchAmountTextView?.text = dinnerListAmount.toString()
+                dinnerAmountTextView?.text = dinnerListAmount.toString()
+                dinnerItemList = itemList
             }
 
             R.id.snackListView -> {
-            snackListAmount += calorieInt
-            val lunchAmountTextView =
-                view.findViewById<TextView>(R.id.snackCalListAmount)
-            lunchAmountTextView?.text = snackListAmount.toString()
+                snackListAmount += calorieInt
+                val snackAmountTextView =
+                    view.findViewById<TextView>(R.id.snackCalListAmount)
+                snackAmountTextView?.text = snackListAmount.toString()
+                snackItemList = itemList
+            }
         }
-        }
-
-        val editor = sharedPreferences.edit()
-        when (listViewId) {
-            R.id.breakfastListView -> editor.putStringSet("breakfast_items", itemList.toSet())
-            R.id.lunchListView -> editor.putStringSet("lunch_items", itemList.toSet())
-            R.id.dinnerListView -> editor.putStringSet("dinner_items", itemList.toSet())
-            R.id.snackListView -> editor.putStringSet("snack_items", itemList.toSet())
-        }
-        editor.putInt("breakfastCalorieAmount", breakfastListAmount)
-        editor.putInt("lunchCalorieAmount", lunchListAmount)
-        editor.putInt("dinnerCalorieAmount", dinnerListAmount)
-        editor.putInt("snackCalorieAmount", snackListAmount)
-        editor.apply()
-
         val adapter =
             ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, itemList)
         val listView = view.findViewById<ListView>(listViewId)
         listView?.adapter = adapter
         adapter.notifyDataSetChanged()
     }
+    private fun resetData() {
+        val fileName = "calorie_data.txt"
+        val file = File(requireContext().filesDir, fileName)
 
-    private fun resetSharedPreferences() {
-        val breakfastItems = sharedPreferences.getStringSet("breakfast_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val lunchItems = sharedPreferences.getStringSet("lunch_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val dinnerItems = sharedPreferences.getStringSet("dinner_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-        val snackItems = sharedPreferences.getStringSet("snack_items", mutableSetOf())?.toMutableList() ?: mutableListOf()
-
-        breakfastItems.clear()
-        lunchItems.clear()
-        dinnerItems.clear()
-        snackItems.clear()
-
-        val breakfastAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, breakfastItems)
-        val breakfastListView = view.findViewById<ListView>(R.id.breakfastListView)
-        breakfastListView.adapter = breakfastAdapter
-
-        val lunchAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, lunchItems)
-        val lunchListView = view.findViewById<ListView>(R.id.lunchListView)
-        lunchListView.adapter = lunchAdapter
-
-        val dinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, dinnerItems)
-        val dinnerListView = view.findViewById<ListView>(R.id.dinnerListView)
-        dinnerListView.adapter = dinnerAdapter
-
-        val snackAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, snackItems)
-        val snackListView = view.findViewById<ListView>(R.id.snackListView)
-        snackListView.adapter = snackAdapter
+        file.writeText("")
     }
 }
