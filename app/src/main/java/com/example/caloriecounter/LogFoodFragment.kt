@@ -2,13 +2,13 @@ package com.example.caloriecounter
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import java.io.File
 
@@ -55,10 +55,7 @@ class LogFoodFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val breakfastItems = mutableListOf<String>()
-        val lunchItems = mutableListOf<String>()
-        val dinnerItems = mutableListOf<String>()
-        val snackItems = mutableListOf<String>()
+        //resetData()
 
         val breakfastAmountTextView =
             view.findViewById<TextView>(R.id.breakfastCalListAmount)
@@ -76,6 +73,27 @@ class LogFoodFragment : Fragment() {
             view.findViewById<TextView>(R.id.snackCalListAmount)
         snackAmountTextView?.text = snackListAmount.toString()
 
+
+        val breakfastAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            breakfastItemList
+        )
+        val breakfastListView = view.findViewById<ListView>(R.id.breakfastListView)
+        breakfastListView.adapter = breakfastAdapter
+
+        val lunchAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, lunchItemList)
+        val lunchListView = view.findViewById<ListView>(R.id.lunchListView)
+        lunchListView.adapter = lunchAdapter
+
+        val dinnerAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, dinnerItemList)
+        val dinnerListView = view.findViewById<ListView>(R.id.dinnerListView)
+        dinnerListView.adapter = dinnerAdapter
+
+        val snackAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, snackItemList)
+        val snackListView = view.findViewById<ListView>(R.id.snackListView)
+        snackListView.adapter = snackAdapter
+
         parentFragmentManager.setFragmentResultListener(
             "itemInputResult",
             this
@@ -86,19 +104,19 @@ class LogFoodFragment : Fragment() {
 
             when (listName) {
                 "breakfast" -> updateListView(
-                    breakfastItems, itemName, calorieAmount, R.id.breakfastListView
+                    breakfastItemList, itemName, calorieAmount, R.id.breakfastListView
                 )
 
                 "lunch" -> updateListView(
-                    lunchItems, itemName, calorieAmount, R.id.lunchListView
+                    lunchItemList, itemName, calorieAmount, R.id.lunchListView
                 )
 
                 "dinner" -> updateListView(
-                    dinnerItems, itemName, calorieAmount, R.id.dinnerListView
+                    dinnerItemList, itemName, calorieAmount, R.id.dinnerListView
                 )
 
                 "snack" -> updateListView(
-                    snackItems, itemName, calorieAmount, R.id.snackListView
+                    snackItemList, itemName, calorieAmount, R.id.snackListView
                 )
             }
         }
@@ -124,57 +142,50 @@ class LogFoodFragment : Fragment() {
         val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
 
         transaction.add(R.id.frameLayout, itemInputFragment)
-
         transaction.addToBackStack(null)
-
         transaction.commit()
     }
 
     private fun saveData() {
-        val fileName = "calorie_data.txt"
-        val file = File(requireContext().filesDir, fileName)
+        val dataFile = "calorie_data.txt"
+        val file = File(requireContext().filesDir, dataFile)
 
-        val dataString = "$breakfastListAmount, $lunchListAmount, $dinnerListAmount," +
-                " $snackListAmount," +
-                " $breakfastItemList," +
-                " $lunchItemList," +
-                " $dinnerItemList," +
-                " $snackItemList,"
+        val dataString = "$breakfastListAmount;" +
+            " $lunchListAmount;" +
+            " $dinnerListAmount;" +
+            " $snackListAmount;" +
+            " $breakfastItemList;" +
+            " $lunchItemList;" +
+            " $dinnerItemList;" +
+            " $snackItemList;"
+
+        Log.d("SaveData", "dataString: $dataString")
+
         file.writeText(dataString)
     }
 
     private fun loadData() {
-        val fileName = "calorie_data.txt"
-        val file = File(requireContext().filesDir, fileName)
+        val dataFile = "calorie_data.txt"
+        val file = File(requireContext().filesDir, dataFile)
 
         try {
-            val dataString = file.readText()
+            val calorieDataString = file.readText()
 
-            if (dataString.isNotEmpty()) {
-                val dataValues = dataString.split(",")
-                breakfastListAmount = dataValues[0].toInt()
-                lunchListAmount = dataValues[1].toInt()
-                dinnerListAmount = dataValues[2].toInt()
-                snackListAmount = dataValues[3].toInt()
-                breakfastItemList = dataValues[4].split(",").toMutableList()
-                lunchItemList = dataValues[5].split(",").toMutableList()
-                dinnerItemList = dataValues[6].split(",").toMutableList()
-                snackItemList = dataValues[7].split(",").toMutableList()
+            if (calorieDataString.isNotEmpty()) {
+                val dataValues = calorieDataString.split(";")
+                Log.d("LoadData", "dataString: $calorieDataString")
+
+                breakfastListAmount = dataValues[0].trim().toInt()
+                lunchListAmount = dataValues[1].trim().toInt()
+                dinnerListAmount = dataValues[2].trim().toInt()
+                snackListAmount = dataValues[3].trim().toInt()
+                breakfastItemList.addAll(dataValues[4].trim().split(","))
 
             } else {
-                breakfastListAmount = 0
-                lunchListAmount = 0
-                dinnerListAmount = 0
-                snackListAmount = 0
-                breakfastItemList = mutableListOf()
-                lunchItemList = mutableListOf()
-                dinnerItemList = mutableListOf()
-                snackItemList = mutableListOf()
+                resetData()
             }
-
         } catch (e: Exception) {
-            val fileContents = file.readText()
-            Log.d("LoadData", "File contents: $fileContents")
+            Log.e("LoadData", "Error loading data", e)
         }
     }
 
@@ -201,7 +212,6 @@ class LogFoodFragment : Fragment() {
                 val breakfastAmountTextView =
                     view.findViewById<TextView>(R.id.breakfastCalListAmount)
                 breakfastAmountTextView?.text = breakfastListAmount.toString()
-                breakfastItemList = itemList
             }
 
             R.id.lunchListView -> {
@@ -209,7 +219,6 @@ class LogFoodFragment : Fragment() {
                 val lunchAmountTextView =
                     view.findViewById<TextView>(R.id.lunchCalListAmount)
                 lunchAmountTextView?.text = lunchListAmount.toString()
-                lunchItemList = itemList
             }
 
             R.id.dinnerListView -> {
@@ -217,7 +226,6 @@ class LogFoodFragment : Fragment() {
                 val dinnerAmountTextView =
                     view.findViewById<TextView>(R.id.dinnerCalListAmount)
                 dinnerAmountTextView?.text = dinnerListAmount.toString()
-                dinnerItemList = itemList
             }
 
             R.id.snackListView -> {
@@ -225,7 +233,6 @@ class LogFoodFragment : Fragment() {
                 val snackAmountTextView =
                     view.findViewById<TextView>(R.id.snackCalListAmount)
                 snackAmountTextView?.text = snackListAmount.toString()
-                snackItemList = itemList
             }
         }
         val adapter =
@@ -235,9 +242,13 @@ class LogFoodFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
     private fun resetData() {
-        val fileName = "calorie_data.txt"
-        val file = File(requireContext().filesDir, fileName)
-
-        file.writeText("")
+        breakfastListAmount = 0
+        lunchListAmount = 0
+        dinnerListAmount = 0
+        snackListAmount = 0
+        breakfastItemList.clear()
+        lunchItemList.clear()
+        dinnerItemList.clear()
+        snackItemList.clear()
     }
 }
