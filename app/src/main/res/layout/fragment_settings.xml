@@ -7,108 +7,164 @@
     android:background="#12131C"
     tools:context=".SettingsFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
+        <RelativeLayout
+            android:id="@+id/relativeLayout22"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings"
-            android:gravity="center"
-            android:padding="15dp"
-            android:textSize="16sp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Settings"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
 
         <View
+            android:id="@+id/view13"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="#565760" />
+            android:background="#565760"
+            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout22"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout22" />
 
         <RelativeLayout
             android:id="@+id/goToProfile"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/listcontainerbg">
+            android:background="@drawable/listcontainerbg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout22"
+            app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profile"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:textSize="18sp"
-                android:layout_centerVertical="true"/>
+                android:text="Profile"
+                android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/baseline_navigate_next_50"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="0dp"/>
+                android:layout_marginEnd="0dp"
+                app:srcCompat="@drawable/baseline_navigate_next_50" />
 
         </RelativeLayout>
 
         <View
+            android:id="@+id/view14"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#565760" />
+            android:background="#565760"
+            app:layout_constraintBottom_toBottomOf="@+id/goToProfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/goToProfile" />
 
         <RelativeLayout
+            android:id="@+id/relativeLayout14"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/listcontainerbg">
+            android:background="@drawable/listcontainerbg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view14"
+            app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dark Theme"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:textSize="18sp"
-                android:layout_centerVertical="true"/>
+                android:text="Dark Theme"
+                android:textSize="18sp" />
 
             <Switch
+                android:id="@+id/darkThemeSwitch"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/darkThemeSwitch"
-                android:checked="true"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="7dp"
+                android:checked="true"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </RelativeLayout>
 
         <View
+            android:id="@+id/view16"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#565760" />
+            android:background="#565760"
+            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout14" />
 
         <RelativeLayout
+            android:id="@+id/relativeLayout15"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/listcontainerbg">
+            android:background="@drawable/listcontainerbg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view16"
+            app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logout"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:textSize="18sp"
-                android:layout_centerVertical="true"/>
+                android:text="Logout"
+                android:textSize="18sp" />
 
         </RelativeLayout>
 
         <View
+            android:id="@+id/view15"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="#565760" />
+            android:background="#565760"
+            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout15" />
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/listcontainerbg"/>
+            android:layout_height="0dp"
+            android:background="@drawable/listcontainerbg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view15"
+            app:layout_constraintVertical_bias="0.0" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
