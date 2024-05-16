@@ -49,6 +49,10 @@ class LogFoodFragment : Fragment() {
 
         loadData()
 
+        val breakfastAdapter = CustomAdapter(requireContext(), breakfastItemList)
+        val breakfastListView = view.findViewById<ListView>(R.id.breakfastListView)
+        breakfastListView.adapter = breakfastAdapter
+
         return view
     }
 
@@ -73,14 +77,6 @@ class LogFoodFragment : Fragment() {
             view.findViewById<TextView>(R.id.snackCalListAmount)
         snackAmountTextView?.text = snackListAmount.toString()
 
-
-        val breakfastAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            breakfastItemList
-        )
-        val breakfastListView = view.findViewById<ListView>(R.id.breakfastListView)
-        breakfastListView.adapter = breakfastAdapter
 
         val lunchAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, lunchItemList)
         val lunchListView = view.findViewById<ListView>(R.id.lunchListView)
@@ -151,13 +147,13 @@ class LogFoodFragment : Fragment() {
         val file = File(requireContext().filesDir, dataFile)
 
         val dataString = "$breakfastListAmount;" +
-            " $lunchListAmount;" +
-            " $dinnerListAmount;" +
-            " $snackListAmount;" +
-            " $breakfastItemList;" +
-            " $lunchItemList;" +
-            " $dinnerItemList;" +
-            " $snackItemList;"
+            "$lunchListAmount;" +
+            "$dinnerListAmount;" +
+            "$snackListAmount;" +
+            "${breakfastItemList.joinToString()};" +
+            "$lunchItemList;" +
+            "$dinnerItemList;" +
+            "$snackItemList;"
 
         Log.d("SaveData", "dataString: $dataString")
 
@@ -179,7 +175,13 @@ class LogFoodFragment : Fragment() {
                 lunchListAmount = dataValues[1].trim().toInt()
                 dinnerListAmount = dataValues[2].trim().toInt()
                 snackListAmount = dataValues[3].trim().toInt()
-                breakfastItemList.addAll(dataValues[4].trim().split(","))
+
+                if (dataValues[4].isNotEmpty()) {
+                    Log.d("LoadData", "breakfastItemList: ${dataValues[4]}")
+                    breakfastItemList.addAll(dataValues[4].trim()
+                        .replace("[", "").replace
+                            ("]", "").split(",").map { it.trim() })
+                }
 
             } else {
                 resetData()
@@ -235,8 +237,7 @@ class LogFoodFragment : Fragment() {
                 snackAmountTextView?.text = snackListAmount.toString()
             }
         }
-        val adapter =
-            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, itemList)
+        val adapter = CustomAdapter(requireContext(), breakfastItemList)
         val listView = view.findViewById<ListView>(listViewId)
         listView?.adapter = adapter
         adapter.notifyDataSetChanged()
