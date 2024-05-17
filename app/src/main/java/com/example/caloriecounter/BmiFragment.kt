@@ -67,19 +67,19 @@ class BmiFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (heightEditText.toString().isEmpty() || weightEditText.toString().isEmpty())
+            if (heightEditText.text.toString().isEmpty() || weightEditText.text.toString().isEmpty())
             {
                 Toast.makeText(context, "Enter all options.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (heightEditText.toString().toInt() < 100 || heightEditText.toString().toInt() > 250)
+            if (heightEditText.text.toString().toInt() < 100 || heightEditText.text.toString().toInt() > 250)
             {
                 Toast.makeText(context, "Enter correct height.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (weightEditText.toString().toInt() < 30 || weightEditText.toString().toInt() > 250)
+            if (weightEditText.text.toString().toInt() < 30 || weightEditText.text.toString().toInt() > 250)
             {
                 Toast.makeText(context, "Enter correct height.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
