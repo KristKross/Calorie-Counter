@@ -2,6 +2,7 @@ package com.example.caloriecounter
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
 import java.io.File
 
 private const val ARG_PARAM1 = "param1"
@@ -61,12 +63,6 @@ class ActivityLevelFragment : Fragment() {
         Active = view.findViewById(R.id.ActiveButton)
         VeryActive = view.findViewById(R.id.VeryActiveButton)
 
-        back = view.findViewById(R.id.signUpBackToMainMenu)
-        back.setOnClickListener {
-            val intent = Intent(requireActivity(), MainMenu::class.java)
-            startActivity(intent)
-        }
-
         notVeryActive.setOnClickListener {
             chosenButton = 1
             lightlyActive.setBackgroundResource(R.drawable.log_in_bg)
@@ -103,24 +99,24 @@ class ActivityLevelFragment : Fragment() {
             VeryActive.setBackgroundResource(R.drawable.activity_level_bg)
         }
 
+        back = view.findViewById(R.id.signUpBackToMainMenu)
+        back.setOnClickListener {
+            val intent = Intent(requireActivity(), MainMenu::class.java)
+            startActivity(intent)
+        }
+
         nextButton = view.findViewById(R.id.nextFragmentGendersButton)
-
         nextButton.setOnClickListener {
-            if (chosenButton != 0) {
-                val dataFile = "bmi_data.txt"
-                val file = File(requireContext().filesDir, dataFile)
-                val dataString = "$chosenButton;"
-                file.appendText(dataString)
-
-                val fragment = InformationFragment()
-                val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
-                transaction.add(R.id.frameLayout, fragment)
-                transaction.addToBackStack("InformationFragment")
-                transaction.commit()
-            } else {
+            if (chosenButton == 0) {
                 Toast.makeText(context, "Choose an option.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
+            val fragment = InformationFragment()
+            val bundle = Bundle()
+            bundle.putInt("data_activity", chosenButton)
+            fragment.arguments = bundle
+            fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, fragment)?.commit()
         }
     }
 }
