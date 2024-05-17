@@ -64,20 +64,25 @@ class ItemInputFragment : Fragment() {
                 Toast.makeText(context, "Please enter all valid inputs.", Toast.LENGTH_SHORT).show()
 
             } else {
-                if (!calorie.isDigitsOnly() || !servingsPerContainer.isDigitsOnly()) {
-                        Toast.makeText(context, "Calorie amount and Servings per container should be a number.", Toast.LENGTH_SHORT).show()
-                } else {
-                    if (calorie < 0.toString()) {
-                        Toast.makeText(context, "Calorie amount should not be less than 0.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val result = Bundle().apply {
-                            putString("listName", listType)
-                            putString("itemName", itemName)
-                            putString("calorie", calorie)
-                        }
-                        parentFragmentManager.setFragmentResult("itemInputResult", result)
+                if (itemName.contains(",")) {
+                    Toast.makeText(context, "Description cannot contain commas.", Toast.LENGTH_SHORT).show()
 
-                        requireActivity().supportFragmentManager.popBackStack()
+                } else {
+                    if (!calorie.isDigitsOnly() || !servingsPerContainer.isDigitsOnly()) {
+                        Toast.makeText(context, "Calorie amount and Servings per container should be a number.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        if (calorie < 0.toString()) {
+                            Toast.makeText(context, "Calorie amount should not be less than 0.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val result = Bundle().apply {
+                                putString("listName", listType)
+                                putString("itemName", itemName)
+                                putString("calorie", calorie)
+                            }
+                            parentFragmentManager.setFragmentResult("itemInputResult", result)
+
+                            requireActivity().supportFragmentManager.popBackStack()
+                        }
                     }
                 }
             }

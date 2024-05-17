@@ -52,13 +52,13 @@ class LogFoodFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_logfood, container, false)
         this.view = view
 
+        loadData()
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loadData()
 
         breakfastAdapter = CustomAdapter(requireContext(), breakfastItemList)
         val breakfastListView = view.findViewById<ListView>(R.id.breakfastListView)
@@ -235,11 +235,6 @@ class LogFoodFragment : Fragment() {
                 val breakfastAmountTextView =
                     view.findViewById<TextView>(R.id.breakfastCalListAmount)
                 breakfastAmountTextView?.text = breakfastListAmount.toString()
-
-                val adapter = CustomAdapter(requireContext(), breakfastItemList)
-                val listView = view.findViewById<ListView>(listViewId)
-                listView?.adapter = adapter
-                adapter.notifyDataSetChanged()
             }
 
             R.id.lunchListView -> {
@@ -247,11 +242,6 @@ class LogFoodFragment : Fragment() {
                 val lunchAmountTextView =
                     view.findViewById<TextView>(R.id.lunchCalListAmount)
                 lunchAmountTextView?.text = lunchListAmount.toString()
-
-                val adapter = CustomAdapter(requireContext(), lunchItemList)
-                val listView = view.findViewById<ListView>(listViewId)
-                listView?.adapter = adapter
-                adapter.notifyDataSetChanged()
             }
 
             R.id.dinnerListView -> {
@@ -259,11 +249,6 @@ class LogFoodFragment : Fragment() {
                 val dinnerAmountTextView =
                     view.findViewById<TextView>(R.id.dinnerCalListAmount)
                 dinnerAmountTextView?.text = dinnerListAmount.toString()
-
-                val adapter = CustomAdapter(requireContext(), dinnerItemList)
-                val listView = view.findViewById<ListView>(listViewId)
-                listView?.adapter = adapter
-                adapter.notifyDataSetChanged()
             }
 
             R.id.snackListView -> {
@@ -272,12 +257,13 @@ class LogFoodFragment : Fragment() {
                     view.findViewById<TextView>(R.id.snackCalListAmount)
                 snackAmountTextView?.text = snackListAmount.toString()
 
-                val adapter = CustomAdapter(requireContext(), snackItemList)
-                val listView = view.findViewById<ListView>(listViewId)
-                listView?.adapter = adapter
-                adapter.notifyDataSetChanged()
             }
         }
+
+        val adapter = CustomAdapter(requireContext(), itemList)
+        val listView = view.findViewById<ListView>(listViewId)
+        listView?.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 
     private fun saveData() {
