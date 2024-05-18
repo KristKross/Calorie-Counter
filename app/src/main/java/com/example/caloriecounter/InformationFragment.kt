@@ -20,8 +20,10 @@ class InformationFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var chosenSex = 0
-    private var chosenAge = 0
+    private var chosenSex: String = "n/a"
+    private var chosenActivity: String = "n/a"
+    private var chosenAge: Int = 0
+
 
     private lateinit var view: View
 
@@ -47,13 +49,15 @@ class InformationFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_information, container, false)
         this.view = view
 
+        loadData()
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val data = arguments?.getInt("data_activity")
+        val data = arguments?.getString("data_activity")
 
         maleButton = view.findViewById(R.id.maleButton)
         femaleButton = view.findViewById(R.id.femaleButton)
@@ -65,14 +69,14 @@ class InformationFragment : Fragment() {
         }
 
         maleButton.setOnClickListener {
-            chosenSex = 1
+            chosenSex = "male"
 
             femaleButton.setBackgroundResource(R.drawable.log_in_bg)
             maleButton.setBackgroundResource(R.drawable.activity_level_bg)
         }
 
         femaleButton.setOnClickListener {
-            chosenSex = 2
+            chosenSex = "female"
 
             maleButton.setBackgroundResource(R.drawable.log_in_bg)
             femaleButton.setBackgroundResource(R.drawable.activity_level_bg)
@@ -80,7 +84,7 @@ class InformationFragment : Fragment() {
 
         next = view.findViewById(R.id.nextFragmentBMIButton)
         next.setOnClickListener {
-            if (chosenSex == 0) {
+            if (chosenSex == "n/a") {
                 Toast.makeText(requireContext(), "Enter your sex.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -105,14 +109,44 @@ class InformationFragment : Fragment() {
             val fragment = BmiFragment()
             val result = Bundle().apply {
                 if (data != null) {
-                    putInt("data_activity", data)
-                    putInt("data_sex", chosenSex)
+                    putString("data_activity", data.toString())
+                    putString("data_sex", chosenSex)
                     putInt("data_age", chosenAge)
+
                 }
             }
+
+            if (data != null) {
+                chosenActivity = data.toString()
+            }
+
+            saveData()
+
             fragment.arguments = result
             fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, fragment)?.commit()
-            Log.d("data", result.toString())
+        }
+    }
+    private fun saveData() {
+        val dataFile = "bmi_data.txt"
+        val file = File(requireContext().filesDir, dataFile)
+
+        val dataString = "$chosenActivity;$chosenSex;$chosenAge;0;0"
+
+        Log.d("SaveData", "dataString: $dataString")
+
+        file.writeText(dataString)
+    }
+
+    private fun loadData() {
+        val dataFile = "bmi_data.txt"
+        val file = File(requireContext().filesDir, dataFile)
+        val dataString = file.readText()
+
+        if (dataString.isNotEmpty()) {
+            val dataValues = dataString.split(";")
+            Log.d("LoadData", "dataString: $dataString")
+
+            chosenActivity = dataValues[0].trim()
         }
     }
 }

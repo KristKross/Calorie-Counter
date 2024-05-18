@@ -82,7 +82,7 @@
             app:layout_constraintTop_toBottomOf="@+id/goToProfile" />
 
         <RelativeLayout
-            android:id="@+id/relativeLayout14"
+            android:id="@+id/backtoLogin"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/list_container_bg"
@@ -90,47 +90,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view14"
-            app:layout_constraintVertical_bias="0.0">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:text="Dark Theme"
-                android:textSize="18sp" />
-
-            <Switch
-                android:id="@+id/darkThemeSwitch"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="7dp"
-                android:checked="true"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/view16"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#565760"
-            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout14"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout14" />
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout15"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/list_container_bg"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view16"
             app:layout_constraintVertical_bias="0.0">
 
             <TextView
@@ -148,10 +107,10 @@
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="#565760"
-            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout15"
+            app:layout_constraintBottom_toBottomOf="@+id/backtoLogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout15" />
+            app:layout_constraintTop_toBottomOf="@+id/backtoLogin" />
 
         <FrameLayout
             android:layout_width="match_parent"

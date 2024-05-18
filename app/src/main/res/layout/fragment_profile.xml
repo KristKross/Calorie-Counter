@@ -77,10 +77,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
-                android:text="170cm"
                 android:textSize="14sp" />
-
-
         </RelativeLayout>
 
         <View
@@ -94,7 +91,7 @@
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout17" />
 
         <RelativeLayout
-            android:id="@+id/relativeLayout18"
+            android:id="@+id/relativeLayout3"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/list_container_bg"
@@ -102,6 +99,44 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view18"
+            app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:text="Weight"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/profileWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#565760"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout18"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/list_container_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4"
             app:layout_constraintVertical_bias="0.0">
 
             <TextView
@@ -119,28 +154,28 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
-                android:text="Male"
                 android:textSize="14sp" />
 
         </RelativeLayout>
 
         <View
-            android:id="@+id/view19"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#565760"
-            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout19"
+            app:layout_constraintBottom_toTopOf="@+id/relativeLayout19"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout19" />
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout18"
+            app:layout_constraintVertical_bias="0.0" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout19"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/list_container_bg"
-            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout21"
+            app:layout_constraintBottom_toTopOf="@+id/view21"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.48"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout18"
             app:layout_constraintVertical_bias="0.0">
@@ -160,48 +195,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
-                android:text="19"
-                android:textSize="14sp" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/view20"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#565760"
-            app:layout_constraintBottom_toTopOf="@+id/relativeLayout19"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout18" />
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout20"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/list_container_bg"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout19"
-            app:layout_constraintVertical_bias="0.0">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:text="Email"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/profileEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:text="A@gmail.com"
                 android:textSize="14sp" />
 
         </RelativeLayout>
@@ -211,18 +204,19 @@
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="#565760"
-            app:layout_constraintBottom_toBottomOf="@+id/relativeLayout20"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout20" />
+            app:layout_constraintEnd_toEndOf="@+id/relativeLayout19"
+            app:layout_constraintStart_toStartOf="@+id/relativeLayout19"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout19"/>
 
         <RelativeLayout
-            android:id="@+id/relativeLayout21"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/list_container_bg"
+            android:background="#393A47"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout20" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view21" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

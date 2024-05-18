@@ -21,7 +21,8 @@ private const val ARG_PARAM2 = "param2"
 class ActivityLevelFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-    private var chosenButton: Int = 0
+
+    private var chosenButton: String = "n/a"
 
     private lateinit var view: View
 
@@ -64,7 +65,7 @@ class ActivityLevelFragment : Fragment() {
         VeryActive = view.findViewById(R.id.VeryActiveButton)
 
         notVeryActive.setOnClickListener {
-            chosenButton = 1
+            chosenButton = "very_light"
             lightlyActive.setBackgroundResource(R.drawable.log_in_bg)
             Active.setBackgroundResource(R.drawable.log_in_bg)
             VeryActive.setBackgroundResource(R.drawable.log_in_bg)
@@ -73,7 +74,7 @@ class ActivityLevelFragment : Fragment() {
         }
 
         lightlyActive.setOnClickListener {
-            chosenButton = 2
+            chosenButton = "light"
             notVeryActive.setBackgroundResource(R.drawable.log_in_bg)
             Active.setBackgroundResource(R.drawable.log_in_bg)
             VeryActive.setBackgroundResource(R.drawable.log_in_bg)
@@ -82,7 +83,7 @@ class ActivityLevelFragment : Fragment() {
         }
 
         Active.setOnClickListener {
-            chosenButton = 3
+            chosenButton = "active"
             notVeryActive.setBackgroundResource(R.drawable.log_in_bg)
             lightlyActive.setBackgroundResource(R.drawable.log_in_bg)
             VeryActive.setBackgroundResource(R.drawable.log_in_bg)
@@ -91,7 +92,7 @@ class ActivityLevelFragment : Fragment() {
         }
 
         VeryActive.setOnClickListener {
-            chosenButton = 4
+            chosenButton = "very_active"
             notVeryActive.setBackgroundResource(R.drawable.log_in_bg)
             lightlyActive.setBackgroundResource(R.drawable.log_in_bg)
             Active.setBackgroundResource(R.drawable.log_in_bg)
@@ -107,14 +108,14 @@ class ActivityLevelFragment : Fragment() {
 
         nextButton = view.findViewById(R.id.nextFragmentGendersButton)
         nextButton.setOnClickListener {
-            if (chosenButton == 0) {
+            if (chosenButton == "n/a") {
                 Toast.makeText(context, "Choose an option.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val fragment = InformationFragment()
             val bundle = Bundle()
-            bundle.putInt("data_activity", chosenButton)
+            bundle.putString("data_activity", chosenButton)
             fragment.arguments = bundle
             fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, fragment)?.commit()
         }
