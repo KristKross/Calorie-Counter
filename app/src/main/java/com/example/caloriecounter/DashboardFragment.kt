@@ -1,12 +1,14 @@
 package com.example.caloriecounter
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ProgressBar
 import android.widget.TextView
 import java.io.File
@@ -123,6 +125,13 @@ class DashboardFragment : Fragment() {
         val snackProgressBar = view.findViewById<ProgressBar>(R.id.snackProgressBar)
         snackProgressBar.max = (totalCalorieIntake * 0.10).toInt()
         snackProgressBar.progress = snackListAmount
+    }
+
+    private fun popUp() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.info_pop_up)
     }
 
     private fun loadCaloricData() {

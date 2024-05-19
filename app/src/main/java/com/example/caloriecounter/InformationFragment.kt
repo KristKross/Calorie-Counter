@@ -20,13 +20,12 @@ class InformationFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var chosenSex: String = "n/a"
-    private var chosenActivity: String = "n/a"
+    // initialising variables to calculate BMI
+    private var chosenSex: String = ""
+    private var chosenActivity: String = ""
     private var chosenAge: Int = 0
 
-
     private lateinit var view: View
-
     private lateinit var back: ImageView
     private lateinit var maleButton: AppCompatButton
     private lateinit var femaleButton: AppCompatButton
@@ -49,7 +48,13 @@ class InformationFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_information, container, false)
         this.view = view
 
-        loadData()
+        maleButton = view.findViewById(R.id.maleButton)
+        femaleButton = view.findViewById(R.id.femaleButton)
+        ageEditText = view.findViewById(R.id.ageEditText)
+        back = view.findViewById(R.id.infoBackToActivityLevel)
+        next = view.findViewById(R.id.nextFragmentBMIButton)
+
+        loadData() // calls loadData() function
 
         return view
     }
@@ -57,79 +62,86 @@ class InformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // sets bundle string to a variable
         val data = arguments?.getString("data_activity")
 
-        maleButton = view.findViewById(R.id.maleButton)
-        femaleButton = view.findViewById(R.id.femaleButton)
-        ageEditText = view.findViewById(R.id.ageEditText)
-
-        back = view.findViewById(R.id.infoBackToActivityLevel)
-        back.setOnClickListener {
-            fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, ActivityLevelFragment())?.commit()
-        }
-
+        // onClickListener for male and female choices
         maleButton.setOnClickListener {
-            chosenSex = "male"
+            chosenSex = "male" // sets the string variable to male
 
+            // sets the background to indicate choice
             femaleButton.setBackgroundResource(R.drawable.log_in_bg)
-            maleButton.setBackgroundResource(R.drawable.activity_level_bg)
+            maleButton.setBackgroundResource(R.drawable.chosen_button_bg)
         }
 
         femaleButton.setOnClickListener {
             chosenSex = "female"
 
             maleButton.setBackgroundResource(R.drawable.log_in_bg)
-            femaleButton.setBackgroundResource(R.drawable.activity_level_bg)
+            femaleButton.setBackgroundResource(R.drawable.chosen_button_bg)
         }
 
-        next = view.findViewById(R.id.nextFragmentBMIButton)
+        // returns to previous choices
+        back.setOnClickListener {
+            fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame,
+                ActivityLevelFragment())?.commit()
+        }
+
+        // transitions to next fragment
         next.setOnClickListener {
-            if (chosenSex == "n/a") {
+            if (chosenSex == "") { // ends onClickListener if choice is empty
                 Toast.makeText(requireContext(), "Enter your sex.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (ageEditText.text.toString().isEmpty()) {
+            if (ageEditText.text.toString().isEmpty()) { // ends onClickListener if choice is empty
                 Toast.makeText(requireContext(), "Enter your age.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (ageEditText.text.toString().toInt() < 18) {
+            if (ageEditText.text.toString().toInt() < 18) { // ends onClickListener if age is less than 18
                 Toast.makeText(requireContext(), "You need to be 18 or older.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (ageEditText.text.toString().toInt() > 80) {
+            if (ageEditText.text.toString().toInt() > 80) { // ends onClickListener if age is more than 18
                 Toast.makeText(requireContext(), "You can't be older than 80.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // changes var to user's choice
             chosenAge = ageEditText.text.toString().toInt()
 
+            // using bundle to send data to next fragment
             val fragment = BmiFragment()
             val result = Bundle().apply {
                 if (data != null) {
                     putString("data_activity", data.toString())
-                    putString("data_sex", chosenSex)
-                    putInt("data_age", chosenAge)
-
+                    chosenActivity = data.toString()
                 }
+                putString("data_sex", chosenSex)
+                putInt("data_age", chosenAge)
             }
 
-            if (data != null) {
-                chosenActivity = data.toString()
+            if (data != null) { // sets the previous choice to a new variable
+
             }
 
-            saveData()
+            saveData() // calls saveData function()
 
-            fragment.arguments = result
+            fragment.arguments = result // saves the bundle results
+
+            // transition to next fragment
             fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, fragment)?.commit()
         }
     }
+
+    // function to save the data in a txt file
     private fun saveData() {
         val dataFile = "bmi_data.txt"
         val file = File(requireContext().filesDir, dataFile)
 
+        // saves the variables in a string separated by semi-colons
         val dataString = "$chosenActivity;$chosenSex;$chosenAge;0;0"
 
         Log.d("SaveData", "dataString: $dataString")
@@ -137,15 +149,19 @@ class InformationFragment : Fragment() {
         file.writeText(dataString)
     }
 
+
+    // function to load the data in this fragment
+    // used if user returns to this fragment
     private fun loadData() {
         val dataFile = "bmi_data.txt"
         val file = File(requireContext().filesDir, dataFile)
         val dataString = file.readText()
 
         if (dataString.isNotEmpty()) {
-            val dataValues = dataString.split(";")
+            val dataValues = dataString.split(";") // splits each variable into a list
             Log.d("LoadData", "dataString: $dataString")
 
+            // gets the first index of the txt file
             chosenActivity = dataValues[0].trim()
         }
     }
