@@ -2,7 +2,6 @@ package com.example.caloriecounter
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +10,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
-import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProvider
-import java.io.File
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -22,10 +18,10 @@ class ActivityLevelFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private var chosenButton: String = "n/a"
+    // initialises a variable to calculate BMI
+    private var chosenButton: String = ""
 
     private lateinit var view: View
-
     private lateinit var back: ImageView
     private lateinit var notVeryActive: AppCompatButton
     private lateinit var lightlyActive: AppCompatButton
@@ -49,9 +45,12 @@ class ActivityLevelFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_activity_level, container, false)
         this.view = view
 
-        val dataFile = "bmi_data.txt"
-        val file = File(requireContext().filesDir, dataFile)
-        file.writeText("")
+        notVeryActive = view.findViewById(R.id.notVeryActiveButton)
+        lightlyActive = view.findViewById(R.id.lightlyActiveButton)
+        Active = view.findViewById(R.id.ActiveButton)
+        VeryActive = view.findViewById(R.id.VeryActiveButton)
+        back = view.findViewById(R.id.signUpBackToMainMenu)
+        nextButton = view.findViewById(R.id.nextFragmentGendersButton)
 
         return view
     }
@@ -59,18 +58,17 @@ class ActivityLevelFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        notVeryActive = view.findViewById(R.id.notVeryActiveButton)
-        lightlyActive = view.findViewById(R.id.lightlyActiveButton)
-        Active = view.findViewById(R.id.ActiveButton)
-        VeryActive = view.findViewById(R.id.VeryActiveButton)
-
+        // onClickListeners for each button
         notVeryActive.setOnClickListener {
-            chosenButton = "very_light"
+            chosenButton = "very_light" // changes the var depending on chosen button
+
+            // sets previous choice outlines to normal
             lightlyActive.setBackgroundResource(R.drawable.log_in_bg)
             Active.setBackgroundResource(R.drawable.log_in_bg)
             VeryActive.setBackgroundResource(R.drawable.log_in_bg)
 
-            notVeryActive.setBackgroundResource(R.drawable.activity_level_bg)
+            // sets outline to green to indicate choice
+            notVeryActive.setBackgroundResource(R.drawable.chosen_button_bg)
         }
 
         lightlyActive.setOnClickListener {
@@ -79,7 +77,7 @@ class ActivityLevelFragment : Fragment() {
             Active.setBackgroundResource(R.drawable.log_in_bg)
             VeryActive.setBackgroundResource(R.drawable.log_in_bg)
 
-            lightlyActive.setBackgroundResource(R.drawable.activity_level_bg)
+            lightlyActive.setBackgroundResource(R.drawable.chosen_button_bg)
         }
 
         Active.setOnClickListener {
@@ -88,7 +86,7 @@ class ActivityLevelFragment : Fragment() {
             lightlyActive.setBackgroundResource(R.drawable.log_in_bg)
             VeryActive.setBackgroundResource(R.drawable.log_in_bg)
 
-            Active.setBackgroundResource(R.drawable.activity_level_bg)
+            Active.setBackgroundResource(R.drawable.chosen_button_bg)
         }
 
         VeryActive.setOnClickListener {
@@ -97,22 +95,23 @@ class ActivityLevelFragment : Fragment() {
             lightlyActive.setBackgroundResource(R.drawable.log_in_bg)
             Active.setBackgroundResource(R.drawable.log_in_bg)
 
-            VeryActive.setBackgroundResource(R.drawable.activity_level_bg)
+            VeryActive.setBackgroundResource(R.drawable.chosen_button_bg)
         }
 
-        back = view.findViewById(R.id.signUpBackToMainMenu)
+        // transitions back to MainMenu activity
         back.setOnClickListener {
             val intent = Intent(requireActivity(), MainMenu::class.java)
             startActivity(intent)
         }
 
-        nextButton = view.findViewById(R.id.nextFragmentGendersButton)
+        // transitions to the next question fragment
         nextButton.setOnClickListener {
-            if (chosenButton == "n/a") {
+            if (chosenButton == "") { // will end onClickListener if no button was chosen
                 Toast.makeText(context, "Choose an option.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // using a bundle to send the variable to the next fragment
             val fragment = InformationFragment()
             val bundle = Bundle()
             bundle.putString("data_activity", chosenButton)

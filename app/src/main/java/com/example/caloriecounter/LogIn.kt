@@ -37,12 +37,6 @@ class LogIn : AppCompatActivity() {
 
         Log.d("SharedPreferences", "Email: $email, Password: $password")
 
-        val currentTime = System.currentTimeMillis()
-        val counter = currentTime - (24 * 60 * 60 * 1000)
-        if (currentTime >= counter) {
-            resetCalorieData(this)
-        }
-
         back = findViewById(R.id.backToMainMenu)
         logInButton = findViewById(R.id.logInButton)
 
@@ -64,13 +58,6 @@ class LogIn : AppCompatActivity() {
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        }
-    }
-    companion object {
-        private fun resetCalorieData(context: Context) {
-            val dataFile = "calorie_data.txt"
-            val file = File(context.filesDir, dataFile)
-            file.writeText("")
         }
     }
 }

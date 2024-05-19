@@ -19,11 +19,13 @@ class MainMenu : AppCompatActivity() {
         logInButton = findViewById(R.id.logInButton)
         signUpButton = findViewById(R.id.signUpButton)
 
+        // transitions to login page
         logInButton.setOnClickListener {
             val intent = Intent(this, LogIn::class.java)
             startActivity(intent)
         }
 
+        // transitions to sign in page
         signUpButton.setOnClickListener {
             val intent = Intent(this, SignUp::class.java)
             startActivity(intent)

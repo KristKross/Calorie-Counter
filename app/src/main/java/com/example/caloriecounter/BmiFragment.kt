@@ -26,10 +26,12 @@ class BmiFragment : Fragment() {
     private lateinit var weightEditText: EditText
     private lateinit var next: Button
 
+
+    // initialises all variables needed to calculate BMI
     private var height: Int = 0
     private var weight: Int = 0
-    private var chosenActivity: String = "n/a"
-    private var chosenSex: String = "n/a"
+    private var chosenActivity: String = ""
+    private var chosenSex: String = ""
     private var chosenAge: Int = 0
 
     private var param1: String? = null
@@ -50,7 +52,12 @@ class BmiFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_bmi, container, false)
         this.view = view
 
-        loadData()
+        heightEditText = view.findViewById(R.id.heightEditText)
+        weightEditText = view.findViewById(R.id.weightEditText)
+        back = view.findViewById(R.id.BMIBackToInformation)
+        next = view.findViewById(R.id.nextFragmentAccountButton)
+
+        loadData() // calls loadData() function
 
         return view
     }
@@ -58,72 +65,63 @@ class BmiFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // sets bundle data to variable
         val activityData = arguments?.getString("data_activity")
         val sexData = arguments?.getString("data_sex")
         val ageData = arguments?.getInt("data_age")
 
-        back = view.findViewById(R.id.BMIBackToInformation)
+        // returns to previous fragment (InformationFragment)
         back.setOnClickListener {
             fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, InformationFragment())?.commit()
         }
 
-        heightEditText = view.findViewById(R.id.heightEditText)
-        weightEditText = view.findViewById(R.id.weightEditText)
-
-        next = view.findViewById(R.id.nextFragmentAccountButton)
+        // transitions to next fragment (AccountFragment)
         next.setOnClickListener {
-            if (!heightEditText.text.toString().isDigitsOnly() || !weightEditText.text.toString().isDigitsOnly()) {
-                Toast.makeText(context, "Enter correct data.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
+            // ends onClickListener if editText are blank.
             if (heightEditText.text.toString().isEmpty() || weightEditText.text.toString().isEmpty())
             {
                 Toast.makeText(context, "Enter all options.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (heightEditText.text.toString().toInt() < 100 || heightEditText.text.toString().toInt() > 250)
+            // ends onClickListener if height is less than or equal to 0 or more than 300
+            if (heightEditText.text.toString().toInt() <= 0 || heightEditText.text.toString().toInt() > 300)
             {
                 Toast.makeText(context, "Enter correct height.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (weightEditText.text.toString().toInt() < 30 || weightEditText.text.toString().toInt() > 250)
+            // ends onClickListener if weight is more than or equal to 0 or more than 80
+            if (weightEditText.text.toString().toInt() <= 0 || weightEditText.text.toString().toInt() > 800)
             {
-                Toast.makeText(context, "Enter correct height.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Enter correct weight.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            /// sets variables to input
             height = heightEditText.text.toString().toInt()
             weight = weightEditText.text.toString().toInt()
 
+            // using a bundle to send data to next fragment
             val fragment = AccountFragment()
             val result = Bundle().apply {
                 if (activityData != null) {
                     putString("data_activity", activityData.toString())
+                    chosenActivity = activityData.toString()
                 }
                 if (sexData != null) {
                     putString("data_sex", sexData.toString())
+                    chosenSex = sexData.toString()
                 }
                 if (ageData != null) {
                     putInt("data_age", ageData)
+                    chosenAge = ageData
                 }
                 putInt("data_height", height)
                 putInt("data_weight", weight)
             }
 
-            if (activityData != null) {
-                chosenActivity = activityData.toString()
-            }
-            if (sexData != null) {
-                chosenSex = sexData.toString()
-            }
-            if (ageData != null) {
-                chosenAge = ageData
-            }
-
-            saveData()
+            saveData() // calls saveData() function
 
             fragment.arguments = result
             fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, fragment)?.commit()
