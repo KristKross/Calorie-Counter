@@ -75,13 +75,15 @@ class BmiFragment : Fragment() {
 
         // returns to previous fragment (InformationFragment)
         back.setOnClickListener {
-            fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, InformationFragment())?.commit()
+            fragmentManager?.beginTransaction()?.replace(
+                R.id.signUpFrame, InformationFragment())?.commit()
         }
 
         // transitions to next fragment (AccountFragment)
         next.setOnClickListener {
             // ends onClickListener if editText are blank.
-            if (heightEditText.text.toString().isEmpty() || weightEditText.text.toString().isEmpty())
+            if (heightEditText.text.toString().isEmpty() ||
+                weightEditText.text.toString().isEmpty())
             {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -101,7 +103,8 @@ class BmiFragment : Fragment() {
             }
 
             // ends onClickListener if height is less than or equal to 0 or more than 300
-            if (heightEditText.text.toString().toInt() <= 0 || heightEditText.text.toString().toInt() > 300)
+            if (heightEditText.text.toString().toInt() <= 0 ||
+                heightEditText.text.toString().toInt() > 300)
             {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -121,7 +124,8 @@ class BmiFragment : Fragment() {
             }
 
             // ends onClickListener if weight is more than or equal to 0 or more than 80
-            if (weightEditText.text.toString().toInt() <= 0 || weightEditText.text.toString().toInt() > 800)
+            if (weightEditText.text.toString().toInt() <= 0 ||
+                weightEditText.text.toString().toInt() > 800)
             {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -169,6 +173,8 @@ class BmiFragment : Fragment() {
             fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, fragment)?.commit()
         }
     }
+
+    // function to save the data in a txt file
     private fun saveData() {
         val dataFile = "bmi_data.txt"
         val file = File(requireContext().filesDir, dataFile)
@@ -180,6 +186,8 @@ class BmiFragment : Fragment() {
         file.writeText(dataString)
     }
 
+    // function to load the data in this fragment
+    // used if user returns to this fragment
     private fun loadData() {
         val dataFile = "bmi_data.txt"
         val file = File(requireContext().filesDir, dataFile)

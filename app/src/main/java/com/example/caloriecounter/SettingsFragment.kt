@@ -37,6 +37,7 @@ class SettingsFragment : Fragment() {
 
         val goToProfile = view.findViewById<RelativeLayout>(R.id.goToProfile)
 
+        // Set a click listener for the button
         goToProfile.setOnClickListener {
             val profileFragment = ProfileFragment()
             requireActivity().supportFragmentManager.beginTransaction()
@@ -44,6 +45,7 @@ class SettingsFragment : Fragment() {
                 .commit()
         }
 
+        // Set a click listener for the button
         val backToLogin = view.findViewById<RelativeLayout>(R.id.backtoLogin)
 
         backToLogin.setOnClickListener {

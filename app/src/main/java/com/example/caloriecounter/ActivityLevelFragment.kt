@@ -107,18 +107,20 @@ class ActivityLevelFragment : Fragment() {
             startActivity(intent)
         }
 
-        // transitions to the next question fragment
+        // transitions to the next question fragment (InformationFragment)
         nextButton.setOnClickListener {
-            if (chosenButton == "") { // will end onClickListener if no button was chosen
+            // ends onClickListener if no button was chosen
+            if (chosenButton == "") {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialog.setCanceledOnTouchOutside(true)
                 dialog.setContentView(R.layout.error_modal_popup)
                 dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
-                dialog.window?.setLayout(
+                dialog.window?.setLayout( // sets the size of the dialog box
                     900,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
+                // sets the text of the error message
                 val textView = dialog.findViewById<TextView>(R.id.errorTextView)
                 textView.text = "Choose an option."
 

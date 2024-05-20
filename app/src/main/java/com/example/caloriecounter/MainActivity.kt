@@ -18,7 +18,10 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
         frame = findViewById(R.id.frameLayout)
 
+        // set up the bottom navigation bar
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
+
+            // replace with the appropriate fragment
             when (menuItem.itemId) {
                 R.id.dashboard -> {
                     replaceFragment(DashboardFragment())
@@ -37,10 +40,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // set the default fragment
         replaceFragment(DashboardFragment())
 
     }
 
+    // function to replace the fragment
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.frameLayout, fragment).commit()
     }

@@ -50,9 +50,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email", "")
-
+        // goes back to previous fragment
         val back = view.findViewById<ImageButton>(R.id.goBackToSettings)
         back.setOnClickListener {
             val settingsFragment = SettingsFragment()
@@ -72,6 +70,7 @@ class ProfileFragment : Fragment() {
         genderTextView.text = chosenSex
     }
 
+    // loads data for fragment
     private fun loadData() {
         val dataFile = "bmi_data.txt"
         val file = File(requireContext().filesDir, dataFile)

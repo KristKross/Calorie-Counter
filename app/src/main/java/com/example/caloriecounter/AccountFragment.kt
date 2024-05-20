@@ -47,22 +47,26 @@ class AccountFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_account, container, false)
         this.view = view
 
+        email = view.findViewById(R.id.emailEditText)
+        password = view.findViewById(R.id.passwordEditText)
+
+        back = view.findViewById(R.id.accountBackToBMI)
+        next = view.findViewById(R.id.accountToMain)
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        email = view.findViewById(R.id.emailEditText)
-        password = view.findViewById(R.id.passwordEditText)
-
-        back = view.findViewById(R.id.accountBackToBMI)
+        // returns to previous fragment (BMIFragment)
         back.setOnClickListener {
             fragmentManager?.beginTransaction()?.replace(R.id.signUpFrame, BmiFragment())?.commit()
         }
 
-        next = view.findViewById(R.id.accountToMain)
+        // transitions to main fragment
         next.setOnClickListener {
+            // check if email or password is empty
             if (email.text.toString().isEmpty() || password.text.toString().isEmpty()) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -81,6 +85,7 @@ class AccountFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            // check if email is valid using regex pattern
             val emailRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
             if (!emailRegex.matches(email.text.toString())) {
                 val dialog = Dialog(requireContext())
@@ -100,7 +105,10 @@ class AccountFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val passwordRegex = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+            // check if password is valid using regex pattern
+            val passwordRegex = Regex(
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+            )
             if (!passwordRegex.matches(password.text.toString())) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -122,17 +130,21 @@ class AccountFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val sharedPreferences = requireActivity().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+            // using shared preferences to store email and password
+            val sharedPreferences = requireActivity().getSharedPreferences(
+                "my_preferences", Context.MODE_PRIVATE
+            )
 
+            // editor to store email and password
             val editor = sharedPreferences.edit()
 
+            // store email and password in shared preferences
             editor.putString("email", email.text.toString())
             editor.putString("password", password.text.toString())
-            Log.d("email", email.text.toString())
-            Log.d("password", password.text.toString())
 
             editor.apply()
 
+            // clears calorie data from txt file
             resetCalorieData()
 
             val intent = Intent(requireActivity(), MainActivity::class.java)

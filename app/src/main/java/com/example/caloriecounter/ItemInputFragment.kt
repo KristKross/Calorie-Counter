@@ -47,16 +47,19 @@ class ItemInputFragment : Fragment() {
         val addFood = view.findViewById<ImageButton>(R.id.addFood)
         val goBack = view.findViewById<ImageButton>(R.id.goBackToLogFood)
 
+        // returns to previous fragment
         goBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
+        // adds food to database
         addFood.setOnClickListener {
             val itemName = itemNameEditText.text.toString()
             val servingSize = servingSizeEditText.text.toString()
             val servingsPerContainer = servingsContainerEditText.text.toString()
             val calorie = calorieEditText.text.toString()
 
+            // checks if all fields are filled
             if (itemName.isEmpty() ||
                 servingSize.isEmpty() ||
                 servingsPerContainer.isEmpty() ||
@@ -78,6 +81,7 @@ class ItemInputFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            // checks if description contains commas
             if (itemName.contains(",")) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -95,6 +99,7 @@ class ItemInputFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            // checks if serving size is less than 1
             if (servingSize.toInt() < 0) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -113,6 +118,7 @@ class ItemInputFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            // checks if serving per container is less than 1
             if (servingsPerContainer.toInt() < 0) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -131,6 +137,7 @@ class ItemInputFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            // checks if calorie is less than 1
             if (calorie.toInt() < 0) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -149,6 +156,7 @@ class ItemInputFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            // passes data to previous fragment
             val result = Bundle().apply {
                 putString("listName", listType)
                 putString("itemName", itemName)

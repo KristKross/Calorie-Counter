@@ -92,7 +92,8 @@ class InformationFragment : Fragment() {
 
         // transitions to next fragment
         next.setOnClickListener {
-            if (chosenSex == "") { // ends onClickListener if choice is empty
+            // ends onClickListener if choice is empty
+            if (chosenSex == "") {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialog.setCanceledOnTouchOutside(true)
@@ -110,7 +111,8 @@ class InformationFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (ageEditText.text.toString().isEmpty()) { // ends onClickListener if choice is empty
+            // ends onClickListener if choice is empty
+            if (ageEditText.text.toString().isEmpty()) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialog.setCanceledOnTouchOutside(true)
@@ -128,7 +130,8 @@ class InformationFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (ageEditText.text.toString().toInt() < 18) { // ends onClickListener if age is less than 18
+            // ends onClickListener if age is less than 18
+            if (ageEditText.text.toString().toInt() < 18) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialog.setCanceledOnTouchOutside(true)
@@ -146,7 +149,8 @@ class InformationFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (ageEditText.text.toString().toInt() > 80) { // ends onClickListener if age is more than 18
+            // ends onClickListener if age is more than 18
+            if (ageEditText.text.toString().toInt() > 80) {
                 val dialog = Dialog(requireContext())
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialog.setCanceledOnTouchOutside(true)
@@ -176,10 +180,6 @@ class InformationFragment : Fragment() {
                 }
                 putString("data_sex", chosenSex)
                 putInt("data_age", chosenAge)
-            }
-
-            if (data != null) { // sets the previous choice to a new variable
-
             }
 
             saveData() // calls saveData function()

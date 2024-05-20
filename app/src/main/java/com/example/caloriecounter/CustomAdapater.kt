@@ -12,18 +12,26 @@ import android.widget.TextView
 class CustomAdapter(private val context: Context, private val itemList: List<String>) :
     ArrayAdapter<String>(context, R.layout.custom_adapater_layout, itemList) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.custom_adapater_layout, parent, false)
+        // Implement the getView method to customize the item layout
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
-        val itemNameTextView = view.findViewById<TextView>(R.id.item_name)
-        val itemCaloriesTextView = view.findViewById<TextView>(R.id.item_calories)
+            // Create a custom layout for each item
+            val view = convertView ?: LayoutInflater.from(context).inflate(
+                R.layout.custom_adapater_layout, parent, false
+            )
 
-        val item = itemList[position]
-        val parts = item.split("  |  ")
+            // Find the TextView for each item
+            val itemNameTextView = view.findViewById<TextView>(R.id.item_name)
+            val itemCaloriesTextView = view.findViewById<TextView>(R.id.item_calories)
 
-        itemNameTextView.text = parts[0]
-        itemCaloriesTextView.text = parts[1]
+            // Set the text for each TextView
+            val item = itemList[position]
+            val parts = item.split("  |  ")
 
-        return view
+            // Set the text for each TextView
+            itemNameTextView.text = parts[0]
+            itemCaloriesTextView.text = parts[1]
+
+            return view
     }
 }
