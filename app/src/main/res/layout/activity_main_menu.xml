@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenu"
-    android:background="#626CC6">
+    android:background="#626CC6"
+    tools:context=".MainMenu">
 
     <TextView
         android:layout_width="wrap_content"
