@@ -1,6 +1,5 @@
 package com.example.caloriecounter
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import java.io.File
@@ -56,6 +56,21 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val infoButton = view.findViewById<ImageView>(R.id.tutorialPopup)
+        infoButton.setOnClickListener {
+            val dialog = Dialog(requireContext())
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setCanceledOnTouchOutside(true)
+            dialog.setContentView(R.layout.info_modal_popup)
+            dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+            dialog.window?.setLayout(
+                900, // or ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+
+            dialog.show()
+        }
 
         if (chosenSex == "male") {
             totalBMR = (10 * weight + (6.25 * height) - (5 * chosenAge) + 5).toInt()
@@ -125,13 +140,6 @@ class DashboardFragment : Fragment() {
         val snackProgressBar = view.findViewById<ProgressBar>(R.id.snackProgressBar)
         snackProgressBar.max = (totalCalorieIntake * 0.10).toInt()
         snackProgressBar.progress = snackListAmount
-    }
-
-    private fun popUp() {
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        dialog.setContentView(R.layout.info_pop_up)
     }
 
     private fun loadCaloricData() {

@@ -1,13 +1,17 @@
 package com.example.caloriecounter
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.io.File
+import java.util.Date
 
 class LogIn : AppCompatActivity() {
     private lateinit var back: ImageView
@@ -47,12 +52,36 @@ class LogIn : AppCompatActivity() {
 
         logInButton.setOnClickListener {
             if (emailEditText.text.toString() != email) {
-                Toast.makeText(this, "Email is incorrect", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(this)
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Email is incorrect"
+
+                dialog.show()
                 return@setOnClickListener
             }
 
             if (passwordEditText.text.toString() != password) {
-                Toast.makeText(this, "Password is incorrect", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(this)
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Password is incorrect"
+
+                dialog.show()
                 return@setOnClickListener
             }
 

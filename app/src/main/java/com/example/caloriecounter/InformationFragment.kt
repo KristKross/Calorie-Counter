@@ -1,14 +1,17 @@
 package com.example.caloriecounter
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import java.io.File
@@ -90,22 +93,74 @@ class InformationFragment : Fragment() {
         // transitions to next fragment
         next.setOnClickListener {
             if (chosenSex == "") { // ends onClickListener if choice is empty
-                Toast.makeText(requireContext(), "Enter your sex.", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Choose your sex."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 
             if (ageEditText.text.toString().isEmpty()) { // ends onClickListener if choice is empty
-                Toast.makeText(requireContext(), "Enter your age.", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Enter your age."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 
             if (ageEditText.text.toString().toInt() < 18) { // ends onClickListener if age is less than 18
-                Toast.makeText(requireContext(), "You need to be 18 or older.", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "You can not be below 18."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 
             if (ageEditText.text.toString().toInt() > 80) { // ends onClickListener if age is more than 18
-                Toast.makeText(requireContext(), "You can't be older than 80.", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "You can not be older than 80."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 

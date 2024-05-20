@@ -1,13 +1,16 @@
 package com.example.caloriecounter
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 
@@ -107,7 +110,20 @@ class ActivityLevelFragment : Fragment() {
         // transitions to the next question fragment
         nextButton.setOnClickListener {
             if (chosenButton == "") { // will end onClickListener if no button was chosen
-                Toast.makeText(context, "Choose an option.", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Choose an option."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 

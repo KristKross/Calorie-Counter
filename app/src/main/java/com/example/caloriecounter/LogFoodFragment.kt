@@ -171,23 +171,24 @@ class LogFoodFragment : Fragment() {
         ) { _, result ->
             val listName = result.getString("listName")
             val itemName = result.getString("itemName")
+            val servingSize = result.getString("servingSize")
             val calorieAmount = result.getString("calorie").toString()
 
             when (listName) {
                 "breakfast" -> updateListView(
-                    breakfastItemList, itemName, calorieAmount, R.id.breakfastListView
+                    breakfastItemList, itemName, servingSize, calorieAmount, R.id.breakfastListView
                 )
 
                 "lunch" -> updateListView(
-                    lunchItemList, itemName, calorieAmount, R.id.lunchListView
+                    lunchItemList, itemName, servingSize, calorieAmount, R.id.lunchListView
                 )
 
                 "dinner" -> updateListView(
-                    dinnerItemList, itemName, calorieAmount, R.id.dinnerListView
+                    dinnerItemList, itemName, servingSize, calorieAmount, R.id.dinnerListView
                 )
 
                 "snack" -> updateListView(
-                    snackItemList, itemName, calorieAmount, R.id.snackListView
+                    snackItemList, itemName, servingSize, calorieAmount, R.id.snackListView
                 )
             }
         }
@@ -220,11 +221,16 @@ class LogFoodFragment : Fragment() {
     private fun updateListView(
         itemList: MutableList<String>,
         itemName: String?,
+        servingSize: String?,
         calorieAmount: String?,
         listViewId: Int) {
 
         if (itemName != null) {
-            itemList.add("$itemName  |  $calorieAmount cal")
+            if (servingSize != null) {
+                itemList.add("$itemName ($servingSize " +
+                        "${if (servingSize.toInt() > 1 ) "cups" else "cup"})" +
+                        "  |  $calorieAmount cal")
+            }
         }
 
         val calorieInt = calorieAmount?.toInt() ?: 0

@@ -1,15 +1,18 @@
 package com.example.caloriecounter
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.text.isDigitsOnly
@@ -80,21 +83,60 @@ class BmiFragment : Fragment() {
             // ends onClickListener if editText are blank.
             if (heightEditText.text.toString().isEmpty() || weightEditText.text.toString().isEmpty())
             {
-                Toast.makeText(context, "Enter all options.", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Enter all options."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 
             // ends onClickListener if height is less than or equal to 0 or more than 300
             if (heightEditText.text.toString().toInt() <= 0 || heightEditText.text.toString().toInt() > 300)
             {
-                Toast.makeText(context, "Enter correct height.", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Enter correct height."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 
             // ends onClickListener if weight is more than or equal to 0 or more than 80
             if (weightEditText.text.toString().toInt() <= 0 || weightEditText.text.toString().toInt() > 800)
             {
-                Toast.makeText(context, "Enter correct weight.", Toast.LENGTH_SHORT).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Enter correct weight."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 

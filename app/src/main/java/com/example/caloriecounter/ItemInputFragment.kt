@@ -1,14 +1,15 @@
 package com.example.caloriecounter
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.Toast
-import androidx.core.text.isDigitsOnly
+import android.widget.TextView
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -61,41 +62,97 @@ class ItemInputFragment : Fragment() {
                 servingsPerContainer.isEmpty() ||
                 calorie.isEmpty()) {
 
-                Toast.makeText(context,
-                    "Please enter all valid inputs.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Please fill in all fields."
+
+                dialog.show()
                 return@setOnClickListener
             }
 
             if (itemName.contains(",")) {
-                Toast.makeText(
-                    context,
-                    "Description cannot contain commas.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Description can not contain commas."
+
+                dialog.show()
                 return@setOnClickListener
             }
 
-            if (!calorie.isDigitsOnly() || !servingsPerContainer.isDigitsOnly()) {
-                Toast.makeText(context,
-                    "Calorie amount and Servings per container should be a number.",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (servingSize.toInt() < 0) {
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Serving size should not be less than 0."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 
-            if (calorie < 0.toString()) {
-                Toast.makeText(context,
-                    "Calorie amount should not be less than 0.",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (servingsPerContainer.toInt() < 0) {
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Servings per container should not be less than 0."
+
+                dialog.show()
+
+                return@setOnClickListener
+            }
+
+            if (calorie.toInt() < 0) {
+                val dialog = Dialog(requireContext())
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.setContentView(R.layout.error_modal_popup)
+                dialog.window?.setBackgroundDrawableResource(R.drawable.modal_bg)
+                dialog.window?.setLayout(
+                    900,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val textView = dialog.findViewById<TextView>(R.id.errorTextView)
+                textView.text = "Calorie amount should not be less than 0."
+
+                dialog.show()
+
                 return@setOnClickListener
             }
 
             val result = Bundle().apply {
                 putString("listName", listType)
                 putString("itemName", itemName)
+                putString("servingSize", servingSize)
                 putString("calorie", calorie)
             }
             parentFragmentManager.setFragmentResult("itemInputResult", result)
