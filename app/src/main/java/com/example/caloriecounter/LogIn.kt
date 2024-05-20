@@ -1,6 +1,5 @@
 package com.example.caloriecounter
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -12,15 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import java.io.File
-import java.util.Date
 
 class LogIn : AppCompatActivity() {
     private lateinit var back: ImageView
@@ -32,6 +23,7 @@ class LogIn : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
+        // gets email and password from shared preferences
         val sharedPreferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
 
         val email = sharedPreferences.getString("email", "")
@@ -45,12 +37,15 @@ class LogIn : AppCompatActivity() {
         back = findViewById(R.id.backToMainMenu)
         logInButton = findViewById(R.id.logInButton)
 
+        // back to MainMenu
         back.setOnClickListener {
             val intent = Intent(this, MainMenu::class.java)
             startActivity(intent)
         }
 
+        // log in the app
         logInButton.setOnClickListener {
+            // returns if email does not match
             if (emailEditText.text.toString() != email) {
                 val dialog = Dialog(this)
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -68,6 +63,7 @@ class LogIn : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // returns if password does not match
             if (passwordEditText.text.toString() != password) {
                 val dialog = Dialog(this)
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

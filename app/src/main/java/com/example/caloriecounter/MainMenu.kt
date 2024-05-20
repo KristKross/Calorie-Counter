@@ -2,11 +2,8 @@ package com.example.caloriecounter
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class MainMenu : AppCompatActivity() {
     private lateinit var logInButton: AppCompatButton
