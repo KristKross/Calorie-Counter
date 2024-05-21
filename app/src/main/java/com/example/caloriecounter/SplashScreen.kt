@@ -35,7 +35,7 @@ class SplashScreen : AppCompatActivity() {
         }, 700L)
 
         android.os.Handler().postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, MainMenu::class.java))
             finish()
         }, SPLASH_TIME_OUT)
     }
