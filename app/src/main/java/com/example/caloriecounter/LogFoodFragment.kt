@@ -60,7 +60,7 @@ class LogFoodFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize the adapters for each list view
+        // initialise the adapters for each list view
         breakfastAdapter = CustomAdapter(requireContext(), breakfastItemList)
         val breakfastListView = view.findViewById<ListView>(R.id.breakfastListView)
         breakfastListView.adapter = breakfastAdapter
@@ -77,7 +77,7 @@ class LogFoodFragment : Fragment() {
         val snackListView = view.findViewById<ListView>(R.id.snackListView)
         snackListView.adapter = snackAdapter
 
-        // Set the text views for the calorie counts
+        // set the text views for the calorie counts
         val breakfastAmountTextView =
             view.findViewById<TextView>(R.id.breakfastCalListAmount)
         breakfastAmountTextView?.text = breakfastListAmount.toString()
@@ -94,7 +94,7 @@ class LogFoodFragment : Fragment() {
             view.findViewById<TextView>(R.id.snackCalListAmount)
         snackAmountTextView?.text = snackListAmount.toString()
 
-        // Set up long click listeners for each list view item
+        // set up long click listeners for each list view item
         breakfastListView.setOnItemLongClickListener { _, _, position, _ ->
             val item = breakfastItemList[position]
             val calories = item.split("|")[1].trim().split(" ")[0].toInt()
@@ -168,7 +168,7 @@ class LogFoodFragment : Fragment() {
             true
         }
 
-        // Set up a listener for the "Add Item" button
+        // set up a listener for the "Add Item" button
         parentFragmentManager.setFragmentResultListener(
             "itemInputResult",
             this
@@ -179,7 +179,7 @@ class LogFoodFragment : Fragment() {
             val servingSize = result.getString("servingSize")
             val calorieAmount = result.getString("calorie").toString()
 
-            // Add the item to the list using a function
+            // add the item to the list using a function
             when (listName) {
                 "breakfast" -> updateListView(
                     breakfastItemList, itemName, servingSize, calorieAmount, R.id.breakfastListView
@@ -204,18 +204,18 @@ class LogFoodFragment : Fragment() {
         val addDinner = view.findViewById<TextView>(R.id.addToDinnerList)
         val addSnack = view.findViewById<TextView>(R.id.addToSnackList)
 
-        // Set up a listener for the "Add Item" button
+        // set up a listener for the "Add Item" button
         addBreakfast.setOnClickListener { goToItemInputFragment("breakfast") }
         addLunch.setOnClickListener { goToItemInputFragment("lunch") }
         addDinner.setOnClickListener { goToItemInputFragment("dinner") }
         addSnack.setOnClickListener { goToItemInputFragment("snack") }
     }
 
-    // Function to add an item to a list
+    // function to add an item to a list
     private fun goToItemInputFragment(listType: String) {
         val itemInputFragment = ItemInputFragment()
 
-        // Pass the list type as an argument
+        // pass the list type as an argument
         val bundle = Bundle()
         bundle.putString("listType", listType)
         itemInputFragment.arguments = bundle
@@ -227,7 +227,7 @@ class LogFoodFragment : Fragment() {
         transaction.commit()
     }
 
-    // Function to update the list view with the item
+    // function to update the list view with the item
     private fun updateListView(
         itemList: MutableList<String>,
         itemName: String?,
@@ -245,7 +245,7 @@ class LogFoodFragment : Fragment() {
 
         val calorieInt = calorieAmount?.toInt() ?: 0
 
-        // Update the calorie count for the list
+        // update the calorie count for the list
         when (listViewId) {
             R.id.breakfastListView -> {
                 breakfastListAmount += calorieInt
@@ -284,7 +284,7 @@ class LogFoodFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-    // Function to save the data to a file
+    // function to save the data to a file
     private fun saveData() {
         val dataFile = "calorie_data.txt"
         val file = File(requireContext().filesDir, dataFile)
@@ -303,7 +303,7 @@ class LogFoodFragment : Fragment() {
         file.writeText(dataString)
     }
 
-    // Function to load the data from a file
+    // function to load the data from a file
     private fun loadData() {
         val dataFile = "calorie_data.txt"
         val file = File(requireContext().filesDir, dataFile)
@@ -349,12 +349,13 @@ class LogFoodFragment : Fragment() {
         }
     }
 
-    // Function that checks if app stopped
+    // function that checks if app stopped
     override fun onStop() {
         super.onStop()
         saveData()
     }
 
+    // function to reset data
     private fun resetData() {
         breakfastListAmount = 0
         lunchListAmount = 0
