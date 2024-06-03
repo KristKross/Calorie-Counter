@@ -10,6 +10,7 @@ import android.view.Window
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import kotlin.time.times
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -156,12 +157,15 @@ class ItemInputFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            // adds serving sizes to calories
+            val newCalories = calorie.toInt() * servingSize.toInt()
+
             // passes data to previous fragment
             val result = Bundle().apply {
                 putString("listName", listType)
                 putString("itemName", itemName)
                 putString("servingSize", servingSize)
-                putString("calorie", calorie)
+                putString("calorie", newCalories.toString())
             }
             parentFragmentManager.setFragmentResult("itemInputResult", result)
             requireActivity().supportFragmentManager.popBackStack()
